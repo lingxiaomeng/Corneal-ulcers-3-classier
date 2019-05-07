@@ -16,9 +16,10 @@ if __name__ == '__main__':
     val_imgs = utils.dataset_normalized(val_imgs)
 
     one_hot_train = to_categorical(np.array(train_labels))
-    # one_hot_val = to_categorical(np.array(val_labels))
+    if len(val_labels > 0):
+        one_hot_val = to_categorical(np.array(val_labels))
     #    onehot_val = to_categorical(data1)
     # print(onehot_train)
     # print(onehot_val)
-    model = Model_inception_v3(args)
-    model.train_5fold(train_imgs, train_labels)
+    model = Model_resNet(args)
+    model.train(train_imgs, one_hot_train, val_imgs, None)

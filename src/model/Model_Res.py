@@ -123,7 +123,7 @@ class Model_resNet():
         x = self.identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
         x = AveragePooling2D((7, 7), name='avg_pool')(x)
         x = Flatten(name='out_feat')(x)
-        x = Dense(2, activation='softmax', name='fc2')(x)
+        x = Dense(3, activation='softmax', name='fc2')(x)
 
         # Create model.
         model = Model(img_input, x)

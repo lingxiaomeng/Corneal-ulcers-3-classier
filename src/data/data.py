@@ -41,13 +41,14 @@ class DataLoader:
         p1 = len(class1_list)
         p2 = len(class2_list)
         p3 = len(class3_list)
+        print("{} {} {}".format(p1, p2, p3))
         data_list = class1_list + class2_list + class3_list
         labels = []
         filenames = []
         imgs = np.empty((len(data_list), self.height, self.width, self.c))
 
-        for idx in tqdm(range(len(class1_list))):
-            file = class1_list[idx]
+        for idx in tqdm(range(len(data_list))):
+            file = data_list[idx]
             img = plt.imread(file)
             # img = img[20:, :, :]
             if img.shape[0] != self.height:
