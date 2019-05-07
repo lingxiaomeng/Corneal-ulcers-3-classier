@@ -68,7 +68,7 @@ class Model_inception_v3:
         self.callbacks.append(
             EarlyStopping(
                 # patience=self.args.early_stopping
-                patience=100
+                patience=self.args.early_stopping
             )
         )
 
@@ -106,7 +106,7 @@ class Model_inception_v3:
     def train(self, training_images, training_labels, validation_images, validation_labels):
         self.init_callbacks('')
         self.model = InceptionV3(include_top=False, weights='imagenet')
-        self.model = self.add_new_last_layer(self.model, nb_classes=2)
+        self.model = self.add_new_last_layer(self.model, nb_classes=3)
         self.model.trainable = True
         self.model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
                            loss='categorical_crossentropy', metrics=['categorical_accuracy'])

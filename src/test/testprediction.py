@@ -7,10 +7,9 @@ import utils
 from data import DataLoader
 from option import args
 
-# 忽略硬件加速的警告信息
+value = 1 / 3
 
-model_nas = 'C:\\Users\mlx\PycharmProjects\角膜\Model\model3_nas\\NASNet_best_weights.h5'
-model_Res = 'D:\Projects\jiaomo-master\Model\model5_resNet\ResNet_best_weights.h5'
+model_Res = 'D:\Projects\jiaomo-3classier\model\model_resnet\ResNet_best_weights.h5'
 mode_fold_res_5 = 'D:\Projects\jiaomo-master\Model\model5_resNet5fold\ResNet_best_weights_fold_4.h5'
 model_inception = 'D:\Projects\jiaomo-master\Model\model_inception_v3\inception_v3_best_weights.h5'
 model_inception5fold = 'D:\Projects\jiaomo-master\Model\model_inception_v35fold\Inception_v3_best_weights_fold_4.h5'
@@ -26,7 +25,7 @@ matplotlib.use('Agg')
 # model.load_weights(model_nas)
 
 ###################################################
-model = load_model(model_inception5fold)
+model = load_model(model_Res)
 ##################################################
 # model = NASNetMobile(classes=2, include_top=True, weights=model_nas)
 # model.load_weights(model_nas)
@@ -72,38 +71,102 @@ def predict(y, num):
     return Sen, spe, bacc, ACC, np.asarray(errorfile)
 
 
-tt = 0
-sen = []
-spe = []
-bacc = []
-ACC = []
-errf = []
-for i in range(0, 101):
-    a, b, c, d, e = predict(y, tt)
-    tt += 0.01
-    sen.append(a)
-    spe.append(b)
-    bacc.append(c)
-    ACC.append(d)
-    errf.append(e)
+errorfile = []
 
-print(sen)
-print(spe)
-print(bacc)
-print(ACC)
-spe_1 = [1 - i for i in spe]
-auc = 0
-tt = 0
-for i in range(0, len(spe_1) - 1):
-    auc += (spe_1[i + 1] - spe_1[i]) * (sen[i] + sen[i + 1]) / 2
+x00 = 0
+x01 = 0
+x02 = 0
+x10 = 0
+x11 = 0
+x12 = 0
+x20 = 0
+x21 = 0
+x22 = 0
 
-print('AUC={}'.format(auc))
 
-index = ACC.index(max(ACC))
-print('specificity={}'.format(spe[index]))
-print('sensitivity={}'.format(sen[index]))
-print('Best B-Accuracy={}'.format(bacc[index]))
-print('Best acc{}'.format(ACC[index]))
-np.savetxt(args.save + 'errorfile', errf[index], fmt='%s', encoding='utf-8')
+def indexmax(xx):
+    index = 0
+    max = 0
+    i = 0
+    for a in xx:
+        if a > max:
+            max = a
+            index = i
+        i += 1
+    return index
 
-print(errf[index])
+
+i = 0
+for d in y:
+    if x_label[i] == 0:
+        index = indexmax(d)
+        if index == 0:
+            x00 += 1
+        if index == 1:
+            x01 += 1
+            errorfile.append(x_file[i])
+        if index == 2:
+            x02 += 1
+            errorfile.append(x_file[i])
+    if x_label[i] == 1:
+        index = indexmax(d)
+        if index == 0:
+            x10 += 1
+            errorfile.append(x_file[i])
+        if index == 1:
+            x11 += 1
+        if index == 2:
+            x12 += 1
+            errorfile.append(x_file[i])
+
+    if x_label[i] == 2:
+        index = indexmax(d)
+        if index == 0:
+            x20 += 1
+            errorfile.append(x_file[i])
+        if index == 1:
+            x21 += 1
+            errorfile.append(x_file[i])
+        if index == 2:
+            x22 += 1
+    i += 1
+
+print("{} {} {}".format(x00, x01, x02))
+print("{} {} {}".format(x10, x11, x12))
+print("{} {} {}".format(x20, x21, x22))
+
+# tt = 0
+# sen = []
+# spe = []
+# bacc = []
+# ACC = []
+# errf = []
+# for i in range(0, 101):
+#     a, b, c, d, e = predict(y, tt)
+#     tt += 0.01
+#     sen.append(a)
+#     spe.append(b)
+#     bacc.append(c)
+#     ACC.append(d)
+#     errf.append(e)
+#
+# print(sen)
+# print(spe)
+# print(bacc)
+# print(ACC)
+# spe_1 = [1 - i for i in spe]
+# auc = 0
+# tt = 0
+# for i in range(0, len(spe_1) - 1):
+#     auc += (spe_1[i + 1] - spe_1[i]) * (sen[i] + sen[i + 1]) / 2
+#
+# print('AUC={}'.format(auc))
+#
+# index = ACC.index(max(ACC))
+# print('specificity={}'.format(spe[index]))
+# print('sensitivity={}'.format(sen[index]))
+# print('Best B-Accuracy={}'.format(bacc[index]))
+# print('Best acc{}'.format(ACC[index]))
+# np.savetxt(args.save + 'errorfile', errf[index], fmt='%s', encoding='utf-8')
+#
+# print(errf[index])

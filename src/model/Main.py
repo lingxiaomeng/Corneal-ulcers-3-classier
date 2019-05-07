@@ -21,5 +21,5 @@ if __name__ == '__main__':
     #    onehot_val = to_categorical(data1)
     # print(onehot_train)
     # print(onehot_val)
-    model = Model_resNet(args)
+    model = Model_inception_v3(args)
     model.train(train_imgs, one_hot_train, val_imgs, None)

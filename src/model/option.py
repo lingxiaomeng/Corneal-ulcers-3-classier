@@ -15,10 +15,10 @@ parser.add_argument('--class3', type=str, default='/片染/', help='class3 direc
 
 parser.add_argument('--filetype', type=str, default='jpg', help='dataset type')
 
-parser.add_argument('--h5dir', type=str, default='/hdf5_0.7_224x224_5fold', help='hdf5储存位置')
-parser.add_argument('--height', type=int, default=224, help='image height')
-parser.add_argument('--width', type=int, default=224, help='image width')
-parser.add_argument('--save', type=str, default='D:\Projects\jiaomo-3classier\model/model_resnet/',
+parser.add_argument('--h5dir', type=str, default='/hdf5_0.7_299x299_5fold', help='hdf5储存位置')
+parser.add_argument('--height', type=int, default=299, help='image height')
+parser.add_argument('--width', type=int, default=299, help='image width')
+parser.add_argument('--save', type=str, default='D:\Projects\jiaomo-3classier\model/model_inception_v3/',
                     help='trained model to save')
 
 parser.add_argument('--train_percent', type=int, default=0.3, help='测试集+验证集占比')
@@ -37,7 +37,7 @@ parser.add_argument('--class_num', type=int, default=2, help='the class_num for 
 parser.add_argument('--early_stopping', type=int, default=1000, help='patience')
 parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')
 parser.add_argument('--online', type=bool, default=False, help='training online')
-parser.add_argument('--batch_size', type=int, default=13, help='')  # Res_net:13 #mobile nas:13 //inception v3 8
+parser.add_argument('--batch_size', type=int, default=8, help='')  # Res_net:13 #mobile nas:13 //inception v3 8
 parser.add_argument('--epoch', type=int, default=1000, help='')
 
 args = parser.parse_args()
