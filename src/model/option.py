@@ -34,10 +34,10 @@ parser.add_argument('--class_num', type=int, default=2, help='the class_num for 
 
 # Training option
 
-parser.add_argument('--early_stopping', type=int, default=100, help='patience')
+parser.add_argument('--early_stopping', type=int, default=1000, help='patience')
 parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')
 parser.add_argument('--online', type=bool, default=False, help='training online')
-parser.add_argument('--batch_size', type=int, default=8, help='')  # Res_net:13 #mobile nas:13 //inception v3 8
+parser.add_argument('--batch_size', type=int, default=13, help='')  # Res_net:13 #mobile nas:13 //inception v3 8
 parser.add_argument('--epoch', type=int, default=1000, help='')
 
 args = parser.parse_args()

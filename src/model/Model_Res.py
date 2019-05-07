@@ -153,7 +153,7 @@ class Model_resNet():
         self.callbacks.append(
             EarlyStopping(
                 # patience=self.args.early_stopping
-                patience=100
+                patience=self.args.early_stopping
             )
         )
 
