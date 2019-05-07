@@ -9,8 +9,10 @@ parser.add_argument('--seed', type=int, default=1, help='random seed')
 parser.add_argument('--prepare', action='store_false', help='Prepare Dataset')
 parser.add_argument('--data_dir', type=str, default='D:\Projects\jiaomo-master\Image/data1',
                     help='data directory')
-parser.add_argument('--class1', type=str, default='/点染/', help='class1 directory label=1')
-parser.add_argument('--class2', type=str, default='/片染点片/', help='class2 directory label=0')
+parser.add_argument('--class1', type=str, default='/点染/', help='class1 directory label=0')
+parser.add_argument('--class2', type=str, default='/点片混合/', help='class2 directory label=1')
+parser.add_argument('--class2', type=str, default='/片染/', help='class3 directory label=2')
+
 parser.add_argument('--filetype', type=str, default='jpg', help='dataset type')
 
 parser.add_argument('--h5dir', type=str, default='/hdf5_0.7_299x299_5fold', help='hdf5储存位置')

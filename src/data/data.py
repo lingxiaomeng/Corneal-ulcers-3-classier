@@ -28,6 +28,7 @@ class DataLoader:
         self.type = args.filetype
         self.class1_dir = args.data_dir + args.class1
         self.class2_dir = args.data_dir + args.class2
+        self.class3_dir = args.data_dir + args.class3
         self.height = args.height
         self.width = args.width
         self.train_percent = args.train_percent
@@ -36,25 +37,31 @@ class DataLoader:
     def _access_dataset(self):
         class1_list = glob.glob(self.class1_dir + '*.' + self.type)
         class2_list = glob.glob(self.class2_dir + '*.' + self.type)
-        p = len(class1_list)
-        data_list = class1_list + class2_list
+        class3_list = glob.glob(self.class3_dir + '*.' + self.type)
+        p1 = len(class1_list)
+        p2 = len(class2_list)
+        data_list = class1_list + class2_list + class3_list
         labels = []
         filenames = []
         imgs = np.empty((len(data_list), self.height, self.width, self.c))
+
         for idx in tqdm(range(len(data_list))):
             file = data_list[idx]
             img = plt.imread(file)
-            img = img[20:, :, :]
+            # img = img[20:, :, :]
             if img.shape[0] != self.height:
                 img = cv2.resize(img, (self.height, self.width), interpolation=cv2.INTER_CUBIC)
             if self.c != 3:  # TODO
                 raise NotImplementedError('The one channels training hasn\'t been implemented')
             else:
                 imgs[idx] = img
-            if idx > p:
+
+            if idx < p1:
                 labels.append(0)
-            else:
+            elif idx < p1 + p2:
                 labels.append(1)
+            else:
+                labels.append(2)
             filenames.append(str(file))
         assert len(data_list) == len(labels)
         return imgs, np.asarray(labels), np.asarray(filenames)
