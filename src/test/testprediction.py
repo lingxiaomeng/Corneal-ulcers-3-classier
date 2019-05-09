@@ -11,7 +11,7 @@ value = 1 / 3
 
 model_Res = 'D:\Projects\jiaomo-3classier\model\model_resnet\ResNet_best_weights.h5'
 mode_fold_res_5 = 'D:\Projects\jiaomo-master\Model\model5_resNet5fold\ResNet_best_weights_fold_4.h5'
-model_inception = 'D:\Projects\jiaomo-master\Model\model_inception_v3\inception_v3_best_weights.h5'
+model_inception = 'D:\Projects\jiaomo-3classier\model\model_inception_v3_02_1\Inception_v3_best_weights.h5'
 model_inception5fold = 'D:\Projects\jiaomo-master\Model\model_inception_v35fold\Inception_v3_best_weights_fold_4.h5'
 data_loader = DataLoader(args)
 x, x_label, x_file = data_loader.get_test()
@@ -25,7 +25,7 @@ matplotlib.use('Agg')
 # model.load_weights(model_nas)
 
 ###################################################
-model = load_model(model_Res)
+model = load_model(model_inception)
 ##################################################
 # model = NASNetMobile(classes=2, include_top=True, weights=model_nas)
 # model.load_weights(model_nas)

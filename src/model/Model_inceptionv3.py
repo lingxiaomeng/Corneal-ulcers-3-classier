@@ -13,7 +13,7 @@ from sklearn.model_selection import StratifiedKFold
 
 class Model_inception_v3:
     def __init__(self, args, load=False):
-        self.ckpt = args.pre_train
+        # self.ckpt = args.pre_train
         self.model = "inception_v3"
         self.args = args
         self.class_num = args.class_num
@@ -106,17 +106,17 @@ class Model_inception_v3:
     def train(self, training_images, training_labels, validation_images, validation_labels):
         self.init_callbacks('')
         self.model = InceptionV3(include_top=False, weights='imagenet')
-        self.model = self.add_new_last_layer(self.model, nb_classes=3)
+        self.model = self.add_new_last_layer(self.model, nb_classes=2)
         self.model.trainable = True
         self.model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
                            loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 
         if len(validation_images) == 0:
             print('no val')
-            validation_images = training_images[350:]
-            validation_labels = training_labels[350:]
-            training_labels = training_labels[:350]
-            training_images = training_images[:350]
+            validation_images = training_images[150:]
+            validation_labels = training_labels[150:]
+            training_labels = training_labels[:150]
+            training_images = training_images[:150]
         train_datagen = ImageDataGenerator(
             rotation_range=40,
             width_shift_range=0.2,

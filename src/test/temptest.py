@@ -5,7 +5,6 @@ img = plt.imread('D:\Projects\jiaomo-3classier\Image\点染\\1.jpg')
 cv2.imwrite(img=img, filename='bef.jpg')
 img = img[20:, :, :]
 
-cv2.imwrite(img=img, filename='after.jpg')
 
 print(len(img[20:, :, ]))
 # print(img)

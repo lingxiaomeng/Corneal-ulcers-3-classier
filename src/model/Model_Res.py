@@ -25,7 +25,7 @@ class Model_resNet():
         self.ckpt = args.pre_train
         self.model = "ResNet"
         self.args = args
-        self.class_num = args.class_num
+        self.class_num = 2
         self.lr = args.lr
         self.epoch = args.epoch
         self.c = args.n_color
@@ -123,7 +123,7 @@ class Model_resNet():
         x = self.identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
         x = AveragePooling2D((7, 7), name='avg_pool')(x)
         x = Flatten(name='out_feat')(x)
-        x = Dense(3, activation='softmax', name='fc2')(x)
+        x = Dense(self.class_num, activation='softmax', name='fc2')(x)
 
         # Create model.
         model = Model(img_input, x)

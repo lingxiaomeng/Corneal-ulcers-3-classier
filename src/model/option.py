@@ -18,15 +18,15 @@ parser.add_argument('--filetype', type=str, default='jpg', help='dataset type')
 parser.add_argument('--h5dir', type=str, default='/hdf5_0.7_299x299_5fold', help='hdf5储存位置')
 parser.add_argument('--height', type=int, default=299, help='image height')
 parser.add_argument('--width', type=int, default=299, help='image width')
-parser.add_argument('--save', type=str, default='D:\Projects\jiaomo-3classier\model/model_inception_v3/',
+parser.add_argument('--save', type=str, default='D:\Projects\jiaomo-3classier\model/model_inception_v3_1_2/',
                     help='trained model to save')
 
 parser.add_argument('--train_percent', type=int, default=0.3, help='测试集+验证集占比')
 parser.add_argument('--val_number', type=int, default=0, help='验证集数目')
 
 parser.add_argument('--model', type=str, default='inceptionv3', help='training model')
-parser.add_argument('--pre_train', type=str, default='../model/pre_train/inception_v3/inception_v3.ckpt',
-                    help='the pre trained model directory')
+# parser.add_argument('--pre_train', type=str, default='../model/pre_train/inception_v3_1_2/inception_v3.ckpt',
+#                     help='the pre trained model directory')
 
 parser.add_argument('--n_color', type=int, default=3, help='the channels used in training')
 parser.add_argument('--cross_validation', type=int, default=0, help='the root for cross validation')
