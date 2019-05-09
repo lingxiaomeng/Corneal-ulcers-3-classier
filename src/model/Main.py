@@ -29,23 +29,19 @@ if __name__ == '__main__':
     new_train_labels = []
     idx = 0
     for i in range(len(train_labels)):
-        if train_labels[i] == 2:
-            img = plt.imread(train_file[i])
-            img = cv2.resize(img, (299, 299), interpolation=cv2.INTER_CUBIC)
-            new_train_imgs[idx] = img
-            new_train_labels.append(1)
-            idx += 1
-        elif train_labels[i] == 1:
-            img = plt.imread(train_file[i])
-            img = cv2.resize(img, (299, 299), interpolation=cv2.INTER_CUBIC)
-            new_train_imgs[idx] = img
+        if train_labels[i] == 1:
+            new_train_imgs[idx] = train_imgs[i]
             new_train_labels.append(0)
             idx += 1
+        elif train_labels[i] == 2:
+            new_train_imgs[idx] = train_imgs[i]
+            new_train_labels.append(1)
+            idx += 1
 
-
-    print(len(new_train_labels))
+    print(new_train_labels)
     one_hot_train = to_categorical(np.array(train_labels))
     new_one_hot_train = to_categorical(np.array(new_train_labels))
+    print(new_one_hot_train)
     if len(val_labels > 0):
         one_hot_val = to_categorical(np.array(val_labels))
     #    onehot_val = to_categorical(data1)

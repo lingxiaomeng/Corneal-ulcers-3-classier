@@ -1,17 +1,22 @@
 import matplotlib
 import numpy as np
+from keras.applications import InceptionV3
 from keras.applications.nasnet import NASNetMobile
+from keras.optimizers import Adam
+from keras.utils import to_categorical
 from tensorflow.python.keras.models import load_model
 
 import utils
+from Model_inceptionv3 import focal_loss
 from data import DataLoader
+from model_v2 import add_new_last_layer
 from option import args
 
 value = 1 / 3
 
 model_Res = 'D:\Projects\jiaomo-3classier\model\model_resnet\ResNet_best_weights.h5'
 mode_fold_res_5 = 'D:\Projects\jiaomo-master\Model\model5_resNet5fold\ResNet_best_weights_fold_4.h5'
-model_inception = 'D:\Projects\jiaomo-3classier\model\model_inception_v3_02_1\Inception_v3_best_weights.h5'
+model_inception = 'D:\Projects\jiaomo-3classier\model\model_inception_v3_1_2\Inception_v3_best_weights.h5'
 model_inception5fold = 'D:\Projects\jiaomo-master\Model\model_inception_v35fold\Inception_v3_best_weights_fold_4.h5'
 data_loader = DataLoader(args)
 x, x_label, x_file = data_loader.get_test()
@@ -25,14 +30,34 @@ matplotlib.use('Agg')
 # model.load_weights(model_nas)
 
 ###################################################
-model = load_model(model_inception)
+model = InceptionV3(include_top=False, weights='imagenet')
+model = add_new_last_layer(model, nb_classes=2)
+# self.model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
+#                    loss='categorical_crossentropy', metrics=['categorical_accuracy'])
+model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
+              loss=[focal_loss(alpha=.25, gamma=2)], metrics=['categorical_accuracy'])
+
+model.load_weights(model_inception)
 ##################################################
 # model = NASNetMobile(classes=2, include_top=True, weights=model_nas)
 # model.load_weights(model_nas)
 ###################################
 # model.summary()
+idx = 0
+x_new_label = []
 y = model.predict(x)
+for i in range(len(x_label)):
+    if x_label[i] == 2:
+        x_new_label.append(1)
+        idx += 1
+    elif x_label[i] == 1:
+        x_new_label.append(0)
+        idx += 1
+    else:
+        x_new_label.append(0)
+        idx += 1
 
+model.evaluate(x, to_categorical(np.array(x_new_label)))
 print(y)
 
 
@@ -135,38 +160,38 @@ print("{} {} {}".format(x00, x01, x02))
 print("{} {} {}".format(x10, x11, x12))
 print("{} {} {}".format(x20, x21, x22))
 
-# tt = 0
-# sen = []
-# spe = []
-# bacc = []
-# ACC = []
-# errf = []
-# for i in range(0, 101):
-#     a, b, c, d, e = predict(y, tt)
-#     tt += 0.01
-#     sen.append(a)
-#     spe.append(b)
-#     bacc.append(c)
-#     ACC.append(d)
-#     errf.append(e)
-#
-# print(sen)
-# print(spe)
-# print(bacc)
-# print(ACC)
-# spe_1 = [1 - i for i in spe]
-# auc = 0
-# tt = 0
-# for i in range(0, len(spe_1) - 1):
-#     auc += (spe_1[i + 1] - spe_1[i]) * (sen[i] + sen[i + 1]) / 2
-#
-# print('AUC={}'.format(auc))
-#
-# index = ACC.index(max(ACC))
-# print('specificity={}'.format(spe[index]))
-# print('sensitivity={}'.format(sen[index]))
-# print('Best B-Accuracy={}'.format(bacc[index]))
-# print('Best acc{}'.format(ACC[index]))
-# np.savetxt(args.save + 'errorfile', errf[index], fmt='%s', encoding='utf-8')
-#
-# print(errf[index])
+tt = 0
+sen = []
+spe = []
+bacc = []
+ACC = []
+errf = []
+for i in range(0, 101):
+    a, b, c, d, e = predict(y, tt)
+    tt += 0.01
+    sen.append(a)
+    spe.append(b)
+    bacc.append(c)
+    ACC.append(d)
+    errf.append(e)
+
+print(sen)
+print(spe)
+print(bacc)
+print(ACC)
+spe_1 = [1 - i for i in spe]
+auc = 0
+tt = 0
+for i in range(0, len(spe_1) - 1):
+    auc += (spe_1[i + 1] - spe_1[i]) * (sen[i] + sen[i + 1]) / 2
+
+print('AUC={}'.format(auc))
+
+index = ACC.index(max(ACC))
+print('specificity={}'.format(spe[index]))
+print('sensitivity={}'.format(sen[index]))
+print('Best B-Accuracy={}'.format(bacc[index]))
+print('Best acc{}'.format(ACC[index]))
+np.savetxt(args.save + 'errorfile', errf[index], fmt='%s', encoding='utf-8')
+
+print(errf[index])
