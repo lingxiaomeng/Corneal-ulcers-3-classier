@@ -16,7 +16,7 @@ value = 1 / 3
 
 model_Res = 'D:\Projects\jiaomo-3classier\model\model_resnet\ResNet_best_weights.h5'
 mode_fold_res_5 = 'D:\Projects\jiaomo-master\Model\model5_resNet5fold\ResNet_best_weights_fold_4.h5'
-model_inception = 'D:\Projects\jiaomo-3classier\model\model_inception_v3_1_2\Inception_v3_best_weights.h5'
+model_inception = 'D:\Projects\jiaomo-3classier\model\model_inception_v3_1_2_3times\Inception_v3_best_weights.h5'
 model_inception5fold = 'D:\Projects\jiaomo-master\Model\model_inception_v35fold\Inception_v3_best_weights_fold_4.h5'
 data_loader = DataLoader(args)
 x, x_label, x_file = data_loader.get_test()
@@ -30,34 +30,16 @@ matplotlib.use('Agg')
 # model.load_weights(model_nas)
 
 ###################################################
-model = InceptionV3(include_top=False, weights='imagenet')
-model = add_new_last_layer(model, nb_classes=2)
-# self.model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
-#                    loss='categorical_crossentropy', metrics=['categorical_accuracy'])
-model.compile(optimizer=Adam(lr=0.0001, beta_1=0.1),
-              loss=[focal_loss(alpha=.25, gamma=2)], metrics=['categorical_accuracy'])
+model = load_model("D:\Projects\jiaomo-3classier\model\model_inception_v3_02_1\Inception_v3_best_weights.h5")
 
-model.load_weights(model_inception)
 ##################################################
 # model = NASNetMobile(classes=2, include_top=True, weights=model_nas)
 # model.load_weights(model_nas)
 ###################################
 # model.summary()
 idx = 0
-x_new_label = []
 y = model.predict(x)
-for i in range(len(x_label)):
-    if x_label[i] == 2:
-        x_new_label.append(1)
-        idx += 1
-    elif x_label[i] == 1:
-        x_new_label.append(0)
-        idx += 1
-    else:
-        x_new_label.append(0)
-        idx += 1
-
-model.evaluate(x, to_categorical(np.array(x_new_label)))
+# model.evaluate(x, to_categorical(np.array(x_new_label)))
 print(y)
 
 
@@ -76,7 +58,7 @@ def predict(y, num):
                 goodnum += 1
             else:
                 errorfile.append(x_file[i])
-        if x_label[i] == 0:
+        if x_label[i] == 2:
             total_bad += 1
             if xx[0] >= 1 - num:
                 badnum += 1
@@ -193,5 +175,4 @@ print('sensitivity={}'.format(sen[index]))
 print('Best B-Accuracy={}'.format(bacc[index]))
 print('Best acc{}'.format(ACC[index]))
 np.savetxt(args.save + 'errorfile', errf[index], fmt='%s', encoding='utf-8')
-
 print(errf[index])
