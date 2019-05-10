@@ -1,3 +1,7 @@
+import option
+from data import DataLoader
+import numpy as np
+
 x_02_1 = [[9.70690131e-01, 2.93099042e-02]
     , [7.04955459e-01, 2.95044571e-01]
     , [2.00341672e-01, 7.99658358e-01]
@@ -212,7 +216,7 @@ x_02_1 = [[9.70690131e-01, 2.93099042e-02]
     , [9.86551404e-01, 1.34485662e-02]
     , [9.99195039e-01, 8.04984476e-04]
     , [1.00000000e+00, 7.04964576e-09]]
-x_0_12 = [[9.92054224e-01, 7.94584677e-03]
+x_12_0 = [[9.92054224e-01, 7.94584677e-03]
     , [1.46073010e-03, 9.98539329e-01]
     , [9.99571025e-01, 4.28976928e-04]
     , [2.46615917e-03, 9.97533798e-01]
@@ -426,3 +430,144 @@ x_0_12 = [[9.92054224e-01, 7.94584677e-03]
     , [5.55435956e-01, 4.44564074e-01]
     , [2.17690904e-04, 9.99782264e-01]
     , [4.86075396e-06, 9.99995112e-01]]
+#
+# print(x_0_12)
+# print(x_02_1)
+
+# x_0_12:  0[1 0]     1[0 1]
+#             点     点片+片
+#             01       2
+# x_02_1:  0[1 0]     1[0 1]
+#            点+片    点片
+#             02       1
+
+data = DataLoader(option.args)
+
+im, real_label, filename = data.get_test()
+
+x00 = 0
+x012 = 0
+x002 = 0
+x01 = 0
+
+x10 = 0
+x112 = 0
+x102 = 0
+x11 = 0
+
+x20 = 0
+x212 = 0
+x202 = 0
+x21 = 0
+
+for i in range(len(real_label)):
+    if real_label[i] == 0:
+        print(str(x_12_0[i]) + " " + str(x_02_1[i]))
+        if x_12_0[i][1] > 0.5:
+            x00 += 1
+        else:
+            x012 += 1
+
+        if x_02_1[i][0] > 0.6:
+            x002 += 1
+        else:
+            x01 += 1
+
+print()
+
+for i in range(len(real_label)):
+    if real_label[i] == 1:
+        print(str(x_12_0[i]) + " " + str(x_02_1[i]))
+        if x_12_0[i][1] > 0.5:
+            x10 += 1
+        else:
+            x112 += 1
+
+        if x_02_1[i][0] > 0.6:
+            x102 += 1
+        else:
+            x11 += 1
+
+print()
+
+for i in range(len(real_label)):
+    if real_label[i] == 2:
+        print(str(x_12_0[i]) + " " + str(x_02_1[i]))
+        if x_12_0[i][1] > 0.5:
+            x20 += 1
+        else:
+            x212 += 1
+
+        if x_02_1[i][0] > 0.6:
+            x202 += 1
+        else:
+            x21 += 1
+
+print('{} {}'.format(x00, x012))
+print('{} {}'.format(x10, x112))
+print('{} {}'.format(x20, x212))
+print()
+print('{} {}'.format(x002, x01))
+print('{} {}'.format(x102, x11))
+print('{} {}'.format(x202, x21))
+print()
+x = np.empty((len(real_label), 3))
+
+for i in range(len(real_label)):
+    x[i][0] = x_02_1[i][0] + x_12_0[i][1]
+    x[i][1] = x_02_1[i][1] + x_12_0[i][0]
+    x[i][2] = x_02_1[i][0] + x_12_0[i][0]
+
+
+def maxindex(sublist):
+    if sublist[0] > sublist[1] and sublist[0] > sublist[2]:
+        return 0
+    if sublist[1] > sublist[0] and sublist[1] > sublist[2]:
+        return 1
+    if sublist[2] > sublist[0] and sublist[2] > sublist[1]:
+        return 2
+
+
+x00 = 0
+x01 = 0
+x02 = 0
+x10 = 0
+x11 = 0
+x12 = 0
+x20 = 0
+x21 = 0
+x22 = 0
+
+i = 0
+for i in range(len(x)):
+    if real_label[i] == 0:
+        index = maxindex(x[i])
+        if index == 0:
+            x00 += 1
+        if index == 1:
+            x01 += 1
+        if index == 2:
+            x02 += 1
+    if real_label[i] == 1:
+        index = maxindex(x[i])
+        if index == 0:
+            x10 += 1
+        if index == 1:
+            x11 += 1
+        if index == 2:
+            x12 += 1
+
+    if real_label[i] == 2:
+        index = maxindex(x[i])
+        if index == 0:
+            x20 += 1
+        if index == 1:
+            x21 += 1
+        if index == 2:
+            x22 += 1
+
+print(x)
+
+print("{} {} {}".format(x00, x01, x02))
+print("{} {} {}".format(x10, x11, x12))
+print("{} {} {}".format(x20, x21, x22))
