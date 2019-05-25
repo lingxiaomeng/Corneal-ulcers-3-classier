@@ -35,3 +35,4 @@ if __name__ == '__main__':
     # print(onehot_val)
     model = Model_inception_v3(args)
     model.train(x_train, to_categorical(np.array(y_train)), x_test, to_categorical(np.array(y_test)))
+    # model.train_5fold(train_imgs, train_labels)

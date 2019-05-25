@@ -22,7 +22,6 @@ from sklearn.model_selection import StratifiedKFold
 
 class Model_resNet():
     def __init__(self, args, load=False):
-        self.ckpt = args.pre_train
         self.model = "ResNet"
         self.args = args
         self.class_num = 2
